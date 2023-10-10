@@ -1,1 +1,1 @@
-# magazyn
+# Gym View
