@@ -14,11 +14,6 @@ class User(AbstractUser):
     )
 
 class Weight(models.Model):
-<<<<<<< Updated upstream
-    date = models.DateField()
-    weight = models.FloatField()
-    User = models.ForeignKey('User', on_delete=models.CASCADE, null=True, blank=True)
-=======
     id = models.AutoField(primary_key=True)
     date = models.DateField()
     weight = models.FloatField()
@@ -31,17 +26,12 @@ class Exercises(models.Model):
     Weight = models.ForeignKey(Weight, on_delete=models.CASCADE, null=True, blank=True)
 
 
->>>>>>> Stashed changes
 
 
 class Training(models.Model):
     name = models.CharField(max_length=255, default="Trening")
     date = models.DateField()
-<<<<<<< Updated upstream
-    exercises = models.ManyToManyField('Exercises')
-=======
     exercises=models.ManyToManyField(Exercises)
->>>>>>> Stashed changes
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     comment = models.TextField(null=True, blank=True)
 
@@ -53,19 +43,8 @@ class SavedTrainings(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
-<<<<<<< Updated upstream
-class Exercises(models.Model):
-    name = models.CharField(max_length=255)
-    weeks = models.ManyToManyField('Week', related_name='exercise_weeks', blank=True, null=True)
-    comment = models.TextField(null=True, blank=True)
-    users = models.ManyToManyField('User', related_name='exercises')
-
-
-class Week(models.Model):
-=======
 class Week(models.Model):
     id = models.AutoField(primary_key=True)
->>>>>>> Stashed changes
     date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     number_of_series = models.IntegerField()
