@@ -28,6 +28,13 @@
   color: #61dafb;
 }
 
+.Hero__background-img {
+  background-image: url(./UI/Backgrounds/risen-wang-20jX9b35r_M-unsplash\ 1.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
