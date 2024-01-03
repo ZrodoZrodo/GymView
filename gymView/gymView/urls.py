@@ -26,6 +26,6 @@ urlpatterns = [
     path('dzia/',TemplateView.as_view(template_name='index.html')),
   
 
-  path('hello-webpack/', TemplateView.as_view(template_name='hello_webpack.html'))
+  path('hello-webpack/', TemplateView.as_view(template_name='test.html'))
 
 ]
