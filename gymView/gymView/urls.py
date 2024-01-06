@@ -23,7 +23,8 @@ urlpatterns = [
     path("user/", include("gymViewApp.urls")),
     path("admin/", admin.site.urls),
     path('a/',admin.site.urls),
-    path('dzia/',TemplateView.as_view(template_name='index.html')),
+    path('',TemplateView.as_view(template_name='homePage.html')),
+    path('addWeek/', TemplateView.as_view(template_name='addWeek.html')),
   
 
   path('hello-webpack/', TemplateView.as_view(template_name='test.html'))
