@@ -21,7 +21,6 @@ class SavedTrainingAdmin(admin.ModelAdmin):
     inlines = [SavedTrainingExerciseInline]
 
 
-admin.site.register(User)
 admin.site.register(Weight)
 admin.site.register(Exercise)
 admin.site.register(Training, TrainingAdmin)
