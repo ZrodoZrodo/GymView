@@ -7,7 +7,7 @@ export const Week=()=>{
 
     return(
         <div className="min-h-screen max-h-full bg-black text-white flex flex-col space-y-36 pt-16 items-center">
-            <>Wybierz datę treningu</>
+            <>Wybierz datę treninguu</>
             <input value={date} onChange={(e)=>setDate(e.target.value) }type="date" className="bg-gray-800 rounded-md h-9 w-1/2 text-white"/>
 
     <div className='text-center bg-black text-white text-4xl'>
