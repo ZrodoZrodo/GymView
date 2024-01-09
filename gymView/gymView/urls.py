@@ -26,7 +26,7 @@ urlpatterns = [
     path('a/',admin.site.urls),
     path('',TemplateView.as_view(template_name='homePage.html')),
     path('addWeek/', TemplateView.as_view(template_name='addWeek.html')),
-  
+    path('addExercise/', TemplateView.as_view(template_name='addExercise.html')),
 
   path('hello-webpack/', TemplateView.as_view(template_name='test.html'))
 
