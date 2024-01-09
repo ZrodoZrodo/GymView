@@ -6,14 +6,29 @@ class Weight(models.Model):
     date = models.DateField()
     weight = models.FloatField()
 
+class Week(models.Model):
+    date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    number_of_series = models.IntegerField()
+    number_of_replication = models.IntegerField()
+    weight = models.FloatField()
+    comment = models.TextField()
+
 class Exercise(models.Model):
     name = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    weeks = models.ManyToManyField(Week, through='ExerciseWeek', related_name='exercise_weeks')
+
+
+class ExerciseWeek(models.Model):
+    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
+    week = models.ForeignKey(Week, on_delete=models.CASCADE)
+    comment = models.TextField()
 
 class Training(models.Model):
     name = models.CharField(max_length=255, default="Trening")
     date = models.DateField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     comment = models.TextField(null=True, blank=True)
     exercises = models.ManyToManyField(Exercise, through='TrainingExercise')
 
@@ -24,21 +39,11 @@ class TrainingExercise(models.Model):
 
 class SavedTraining(models.Model):
     name = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     exercises = models.ManyToManyField(Exercise, through='SavedTrainingExercise')
 
 class SavedTrainingExercise(models.Model):
     saved_training = models.ForeignKey(SavedTraining, on_delete=models.CASCADE)
     exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
-    comment = models.TextField()
-
-class Week(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True, blank=True)
-    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
-    date = models.DateField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    number_of_series = models.IntegerField()
-    number_of_replication = models.IntegerField()
-    weight = models.FloatField()
     comment = models.TextField()

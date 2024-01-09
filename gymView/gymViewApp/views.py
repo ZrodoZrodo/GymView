@@ -2,9 +2,9 @@
 from django.shortcuts import render, redirect
 # Create your views here.
 from django.http import HttpResponse
-from rest_framework import serializers
+from rest_framework import serializers,status
 from django.contrib.auth.models import User
-from .models import Training,Exercise,TrainingExercise
+from .models import Training,Exercise,TrainingExercise,Week,ExerciseWeek
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
@@ -76,12 +76,31 @@ class TrainingSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AddTrainingSerializer(serializers.ModelSerializer):
-    exercises = serializers.ListField(child=serializers.DictField())
+    exercises = serializers.ListField(child=serializers.IntegerField())
 
     class Meta:
         model = Training
         fields = ['name', 'date', 'comment', 'exercises']
 
+    def create(self, validated_data):
+        user = self.context['request'].user
+        name = validated_data['name']
+        date = validated_data['date']
+        comment = validated_data.get('comment', '')
+
+        # Create a new training for the user
+        new_training = Training.objects.create(user=user, name=name, date=date, comment=comment)
+
+        # Add exercises to the training
+        exercises_ids = validated_data['exercises']
+        for exercise_id in exercises_ids:
+            exercise = Exercise.objects.get(pk=exercise_id)
+
+            # Create TrainingExercise instance
+            TrainingExercise.objects.create(training=new_training, exercise=exercise)
+
+        return new_training
+    
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.date = validated_data.get('date', instance.date)
@@ -91,48 +110,27 @@ class AddTrainingSerializer(serializers.ModelSerializer):
         exercises_data = validated_data.get('exercises', [])
         instance.trainingexercise_set.all().delete()  # Remove existing exercises
 
-        for exercise_data in exercises_data:
-            exercise_name = exercise_data.get('name', '')
-            exercise_comment = exercise_data.get('comment', '')
-
-            # Create or get the exercise
-            exercise, created = Exercise.objects.get_or_create(name=exercise_name)
+        for exercise_id in exercises_data:
+            exercise = Exercise.objects.get(pk=exercise_id)
 
             # Create TrainingExercise instance
-            TrainingExercise.objects.create(training=instance, exercise=exercise, comment=exercise_comment)
+            TrainingExercise.objects.create(training=instance, exercise=exercise)
 
         instance.save()
         return instance
+    
 
 class TrainingView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        serializer = AddTrainingSerializer(data=request.data)
-        if serializer.is_valid():
-            user = request.user
-            name = serializer.validated_data['name']
-            date = serializer.validated_data['date']
-            comment = serializer.validated_data.get('comment', '')
-
-            # Create a new training for the user
-            new_training = Training.objects.create(user=user, name=name, date=date, comment=comment)
-
-            # Add exercises to the training
-            exercises_data = serializer.validated_data['exercises']
-            for exercise_data in exercises_data:
-                exercise_name = exercise_data.get('name', '')
-                exercise_comment = exercise_data.get('comment', '')
-
-                # Create or get the exercise
-                exercise, created = Exercise.objects.get_or_create(name=exercise_name)
-
-                # Create TrainingExercise instance
-                TrainingExercise.objects.create(training=new_training, exercise=exercise, comment=exercise_comment)
-
-            return Response({'message': 'Training added successfully'}, status=201)
-        else:
-            return Response(serializer.errors, status=400)
+            serializer = AddTrainingSerializer(data=request.data, context={'request': request})
+            if serializer.is_valid():
+                training = serializer.save()
+                return Response({'message': 'Training added successfully'}, status=201)
+            else:
+                return Response(serializer.errors, status=400)
+        
 
     def get(self, request,pk=None):
         if pk==None:
@@ -169,3 +167,96 @@ class TrainingView(APIView):
 
         training.delete()
         return Response({'message': 'Training deleted successfully'}, status=200)
+
+class WeekSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Week
+        fields = '__all__'
+
+
+
+class ExerciseView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        serializer = ExerciseSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response({'message': 'Exercise added successfully'}, status=201)
+        else:
+            return Response(serializer.errors, status=400)
+
+    def get(self, request):
+        user = request.user
+        user_exercises = Exercise.objects.filter(user=user)
+        serializer = ExerciseSerializer(user_exercises, many=True)
+        
+        # Serialize the data with WeekSerializer to include the full representation of Week objects
+        serialized_data = []
+        for exercise_data in serializer.data:
+            weeks_data = exercise_data.get('weeks', [])
+
+            # Retrieve Week instances using the IDs
+            week_instances = Week.objects.filter(pk__in=weeks_data)
+            week_serializer = WeekSerializer(week_instances, many=True)
+            
+            exercise_data['weeks'] = week_serializer.data
+            serialized_data.append(exercise_data)
+
+        return Response(serialized_data)
+    
+    def put(self, request, pk):  # Assuming you pass the exercise ID in the URL
+        exercise_id = pk
+        try:
+            exercise = Exercise.objects.get(pk=exercise_id)
+        except Exercise.DoesNotExist:
+            return Response({'error': 'Exercise does not exist'}, status=404)
+
+        serializer = ExerciseSerializer(exercise, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+
+            # Clear existing ExerciseWeek instances
+            ExerciseWeek.objects.filter(exercise=exercise).delete()
+
+            # Create or update related ExerciseWeek instances
+            for week_data in request.data.get('weeks', []):
+                week_serializer = WeekSerializer(data=week_data)
+                if week_serializer.is_valid():
+                    week_instance = week_serializer.save()
+                    ExerciseWeek.objects.create(exercise=exercise, week=week_instance)
+
+            return Response({'message': 'Exercise updated successfully'}, status=200)
+        else:
+            return Response(serializer.errors, status=400)
+    def delete(self, request, pk):
+            try:
+                exercise = Exercise.objects.get(pk=pk)
+            except Exercise.DoesNotExist:
+                return Response({'error': 'Exercise does not exist'}, status=404)
+
+            exercise.delete()
+            return Response({'message': 'Exercise deleted successfully'}, status=200)
+    def get(self, request, pk):  # Add pk parameter to get the exercise ID from the URL
+        user = request.user
+        try:
+            # Retrieve a single Exercise instance by ID
+            user_exercise = Exercise.objects.get(pk=pk, user=user)
+        except Exercise.DoesNotExist:
+            return Response({'error': 'Exercise does not exist'}, status=404)
+
+        # Serialize the single Exercise instance
+        serializer = ExerciseSerializer(user_exercise)
+        
+        # Serialize the data with WeekSerializer to include the full representation of Week objects
+        weeks_data = serializer.data.get('weeks', [])
+
+        # Retrieve Week instances using the IDs
+        week_instances = Week.objects.filter(pk__in=weeks_data)
+        week_serializer = WeekSerializer(week_instances, many=True)
+
+        # Add the serialized Week data to the Exercise data
+        serialized_data = serializer.data
+        serialized_data['weeks'] = week_serializer.data
+
+        return Response(serialized_data)
