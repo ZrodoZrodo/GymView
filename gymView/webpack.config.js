@@ -1,9 +1,9 @@
 const path = require("path");
 
 module.exports = {
-  entry: "./assets/info.js", // path to our input file
+  entry: "./assets/register.js", // path to our input file
   output: {
-    filename: "info.js", // output bundle file name
+    filename: "register.js", // output bundle file name
     path: path.resolve(__dirname, "./static"), // path to our Django static directory
   },
   module: {
@@ -17,6 +17,17 @@ module.exports = {
       {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif)$/i,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              outputPath: "assets/UI/backgrounds", // Set your desired output path
+            },
+          },
+        ],
       },
     ],
   },

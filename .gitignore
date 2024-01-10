@@ -166,7 +166,6 @@ cython_debug/
 /node_modules
 
 /gymView/node_modules/
-gymView/
 gymView/node_modules
 gymView/node_modules/.bin/acorn
 gymView/node_modules/.bin/acorn.ps1
