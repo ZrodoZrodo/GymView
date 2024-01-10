@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Input } from "../components/input";
-import { Textarea } from "../components/textArea";
+import Input from "../components/Input";
+import { Textarea } from "../components/textarea";
 
 export const AddExercise = () => {
   const [exercise, setExercise] = useState({});

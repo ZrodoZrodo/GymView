@@ -1,9 +1,9 @@
 const path = require("path");
 
 module.exports = {
-  entry: "./assets/addExercise.js", // path to our input file
+  entry: "./assets/info.js", // path to our input file
   output: {
-    filename: "addExercise.js", // output bundle file name
+    filename: "info.js", // output bundle file name
     path: path.resolve(__dirname, "./static"), // path to our Django static directory
   },
   module: {
