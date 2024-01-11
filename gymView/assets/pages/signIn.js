@@ -43,9 +43,9 @@ const SignIn = () => {
           <LoginForm />
           <p className="text-center mt-4">
             Don't have an account?
-            <span className="underline underline-offset-4 pl-1">
+            <a href="http://localhost:8000/register/" className="underline underline-offset-4 pl-1" >
               Sign up for free
-            </span>
+            </a>
           </p>
         </div>
       </div>
