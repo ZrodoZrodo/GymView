@@ -186,24 +186,50 @@ class ExerciseView(APIView):
         else:
             return Response(serializer.errors, status=400)
 
-    def get(self, request):
-        user = request.user
-        user_exercises = Exercise.objects.filter(user=user)
-        serializer = ExerciseSerializer(user_exercises, many=True)
-        
-        # Serialize the data with WeekSerializer to include the full representation of Week objects
-        serialized_data = []
-        for exercise_data in serializer.data:
-            weeks_data = exercise_data.get('weeks', [])
+    def get(self, request,pk=None):
+        if pk==None:
+            user = request.user
+            user_exercises = Exercise.objects.filter(user=user)
+            serializer = ExerciseSerializer(user_exercises, many=True)
+            
+            # Serialize the data with WeekSerializer to include the full representation of Week objects
+            serialized_data = []
+            for exercise_data in serializer.data:
+                weeks_data = exercise_data.get('weeks', [])
+
+                # Retrieve Week instances using the IDs
+                week_instances = Week.objects.filter(pk__in=weeks_data)
+                week_serializer = WeekSerializer(week_instances, many=True)
+                
+                exercise_data['weeks'] = week_serializer.data
+                serialized_data.append(exercise_data)
+
+            return Response(serialized_data)
+        else:
+            user = request.user
+            try:
+                # Retrieve a single Exercise instance by ID
+                user_exercise = Exercise.objects.get(pk=pk, user=user)
+            except Exercise.DoesNotExist:
+                return Response({'error': 'Exercise does not exist'}, status=404)
+
+            # Serialize the single Exercise instance
+            serializer = ExerciseSerializer(user_exercise)
+            
+            # Serialize the data with WeekSerializer to include the full representation of Week objects
+            weeks_data = serializer.data.get('weeks', [])
 
             # Retrieve Week instances using the IDs
             week_instances = Week.objects.filter(pk__in=weeks_data)
             week_serializer = WeekSerializer(week_instances, many=True)
-            
-            exercise_data['weeks'] = week_serializer.data
-            serialized_data.append(exercise_data)
 
-        return Response(serialized_data)
+            # Add the serialized Week data to the Exercise data
+            serialized_data = serializer.data
+            serialized_data['weeks'] = week_serializer.data
+
+            return Response(serialized_data)
+
+
     
     def put(self, request, pk):  # Assuming you pass the exercise ID in the URL
         exercise_id = pk
@@ -237,26 +263,3 @@ class ExerciseView(APIView):
 
             exercise.delete()
             return Response({'message': 'Exercise deleted successfully'}, status=200)
-    def get(self, request, pk):  # Add pk parameter to get the exercise ID from the URL
-        user = request.user
-        try:
-            # Retrieve a single Exercise instance by ID
-            user_exercise = Exercise.objects.get(pk=pk, user=user)
-        except Exercise.DoesNotExist:
-            return Response({'error': 'Exercise does not exist'}, status=404)
-
-        # Serialize the single Exercise instance
-        serializer = ExerciseSerializer(user_exercise)
-        
-        # Serialize the data with WeekSerializer to include the full representation of Week objects
-        weeks_data = serializer.data.get('weeks', [])
-
-        # Retrieve Week instances using the IDs
-        week_instances = Week.objects.filter(pk__in=weeks_data)
-        week_serializer = WeekSerializer(week_instances, many=True)
-
-        # Add the serialized Week data to the Exercise data
-        serialized_data = serializer.data
-        serialized_data['weeks'] = week_serializer.data
-
-        return Response(serialized_data)

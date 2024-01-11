@@ -3,7 +3,6 @@ import Navbar from '../components/navbar';
 
 
 export const HomePage = () => {
-console.log("d")
     return ( <div className=" max-h-screen w-full min-h-screen  Hero__background-img">
         <Navbar/>
         <div className="flex flex-col items-center justify-center mt-56 ">
