@@ -166,7 +166,6 @@ cython_debug/
 /node_modules
 
 /gymView/node_modules/
-gymView/
 gymView/node_modules
 gymView/node_modules/.bin/acorn
 gymView/node_modules/.bin/acorn.ps1
@@ -4431,3 +4430,8 @@ gymView/node_modules/yocto-queue/index.js
 gymView/node_modules/yocto-queue/license
 gymView/node_modules/yocto-queue/package.json
 gymView/node_modules/yocto-queue/readme.md
+gymView/gymViewApp/migrations/0003_alter_savedtraining_owner_alter_training_trainee_and_more.py
+gymView/gymViewApp/migrations/0004_rename_owner_savedtraining_user_and_more.py
+gymView/gymViewApp/migrations/0005_exercise_user_week_user.py
+gymView/gymViewApp/migrations/0006_exerciseweek_exercise_weeks.py
+gymView/gymViewApp/migrations/0007_remove_week_exercise_remove_week_user.py
