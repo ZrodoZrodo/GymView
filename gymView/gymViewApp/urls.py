@@ -20,5 +20,7 @@ urlpatterns = [
     path('Trening/', views.TrainingView.as_view(), name ='TreningView'),
     path('exercise/', views.ExerciseView.as_view(), name ='ExerciseView'),
     path('exercise/<int:pk>/', views.ExerciseView.as_view(), name ='ExerciseView'),
+     path('savedTrening/', views.SavedTrainingView.as_view(), name='SavedTrainingView'),
+     path('savedTrening/<int:pk>/', views.SavedTrainingView.as_view(), name='SavedTrainingView')
 ]
 
