@@ -30,6 +30,7 @@ urlpatterns = [
     path('info/', TemplateView.as_view(template_name='info.html')),
     path('signIn/', TemplateView.as_view(template_name='signIn.html')),
     path('register/', TemplateView.as_view(template_name='register.html')),
+    path('info/', TemplateView.as_view(template_name='info.html')),
   path('hello-webpack/', TemplateView.as_view(template_name='test.html'))
 
 ]
