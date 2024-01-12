@@ -3,7 +3,7 @@ import { Input } from "../components/input";
 import LoginForm from "../components/loginForm";
 import background from "../UI/backgrounds/signIn.png";
 
-const SignIn = () => {
+export const SignIn = () => {
   return (
     <div className="min-h-screen grid grid-none md:grid-cols-2">
       <div
@@ -53,4 +53,3 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;

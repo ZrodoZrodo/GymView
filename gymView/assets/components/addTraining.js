@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Textarea } from "./textarea";
+import {useCookies} from 'react-cookie'
+
 
 const AddTraining = () => {
+  const [cookie,setCookie]=useCookies(['JWT'])
+
+
+const [data,setData]=useState({exercises:[]})
+
+
+const handleSubmit=(e)=>{
+e.preventDefault()
+}
+console.log(cookie)
+console.log(data)
   return (
     <div class="card w-full h-full bg-[#1c1c1e] rounded-none md:w-9/12">
       <div class="flex flex-col space-y-4 card-body">
@@ -24,20 +37,22 @@ const AddTraining = () => {
             name="title"
             placeholder="Name of traomomg"
             className="input input-bordered border-[#f78627] max-w-xs"
+            onChange={(e)=>setData((prev)=>({...prev,name:e.target.value}))}
           />{" "}
           <hr className="border-[#f78627] w-4/5" />
           <p className="text-2xl"> Week:</p>
           <input
-            type="number"
-            min="1"
+            type="date"
             placeholder="Week"
             className="input input-bordered border-[#f78627] max-w-xs"
+            onChange={(e)=>setData((prev)=>({...prev,date:e.target.value}))}
           />{" "}
           <hr className="border-[#f78627] w-4/5" />
           <p className="text-2xl"> List of excersise</p>
           <hr className="border-[#f78627] w-4/5" />
           <p className="text-2xl"> Comment:</p>
           <textarea
+          onChange={(e)=>setData((prev)=>({...prev,comment:e.target.value}))}
             type="text"
             rows="8"
             cols="100"

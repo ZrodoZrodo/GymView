@@ -26,7 +26,7 @@ const LoginForm = () => {
     })
     
   }
-  console.log(cookie)
+  
 
   return (
     <form>
