@@ -1,8 +1,10 @@
 import React,{useState} from "react";
+import { useNavigate } from "react-router-dom";
+
 const RegisterForm = () => {
   
   const [data,setData]=useState({})
-
+  const navigate=useNavigate()
   const [fail,setFail]=useState(false)
   const handleSubmit = (e)=>{
     e.preventDefault();
@@ -12,7 +14,7 @@ const RegisterForm = () => {
       headers: {
         "Content-Type": "application/json",
       },
-    }).then(resp=>resp.status===400?setFail(true):location.href='http://localhost:8000/signIn/')
+    }).then(resp=>resp.status===400?setFail(true):navigate('/signin'))
     
   }
   return (

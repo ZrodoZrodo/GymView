@@ -4,7 +4,7 @@ import Sidebar from "../components/sideBar";
 import { DashboardInfo } from "../components/dashboardInfo";
 import AddTraining from "../components/addTraining";
 
-const Dashboard = () => {
+export const Dashboard = () => {
   return (
     <div className="flex flex-wrap max-h-screen w-full min-h-screen">
       <DashboardNavbar></DashboardNavbar>
@@ -16,5 +16,3 @@ const Dashboard = () => {
     </div>
   );
 };
-
-export default Dashboard;

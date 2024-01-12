@@ -1,7 +1,11 @@
 
 import React from 'react'
+import { useNavigate } from "react-router-dom";
+
 export const Navbar = () => {
    
+  const navigate=useNavigate()
+
         return (
             <div className="navbar pt-8">
             <div className="navbar-start">
@@ -26,11 +30,11 @@ export const Navbar = () => {
             </div>
             <div className="navbar-center hidden lg:flex">
               <ul className="menu menu-horizontal px-1">
-                <li><a className="text-main-orange">Home page</a></li>
+                <li><a className="text-main-orange" onClick={()=>navigate('/')}>Home page</a></li>
                 <li>
-                    <a>Sign in!</a>    
+                    <a onClick={()=>navigate('/signin')}>Sign in!</a>    
                 </li>
-                <li><a>Register</a></li>
+                <li><a onClick={()=>navigate('/register')}>Register</a></li>
               </ul>
             </div>
             <div className="navbar-end">

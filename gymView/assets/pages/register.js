@@ -3,7 +3,7 @@ import backgroundregister from "../UI/backgrounds/register.png";
 import logo from "../UI/Logo.png";
 import RegisterForm from "../components/registerForm";
 
-const Register = () => {
+export const Register = () => {
 
 
 
@@ -59,4 +59,3 @@ const Register = () => {
   );
 };
 
-export default Register;

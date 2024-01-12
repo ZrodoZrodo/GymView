@@ -7,7 +7,6 @@ export const Info = () => {
       <div className="navbar bg-[#1C1C1E] ">
         <p className=" text-4xl text-[#F78627] font-bold"> GymView </p>
       </div>
-      <Link to="/signin">Home</Link>
       <div className="bg-black pt-8 px-10 min-h-screen">
         <div className="flex flex-row">
           <hr className="border-[#F78627] w-16 mx-4 mt-16"></hr>
