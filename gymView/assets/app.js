@@ -5,6 +5,7 @@ import { SignIn } from "./pages/signIn";
 import { useCookies } from "react-cookie";
 import { Register } from "./pages/register";
 import { HomePage } from "./pages/homePage";
+import { Dashboard } from "./pages/dashboard";
 
 export const App=()=>{
     const [cookie,setCookie]=useCookies(['tese'])
@@ -19,7 +20,7 @@ export const App=()=>{
           <Route path="/info" element={<Info />}></Route>
           <Route path="/signin" element={<SignIn />}></Route>
           <Route path="/register" element={<Register />}></Route>
-
+          <Route path="/dashboard" element={<Dashboard />}></Route>
         </Routes>
       </BrowserRouter>
     </>
