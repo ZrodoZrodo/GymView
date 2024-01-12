@@ -4,10 +4,6 @@ import logo from "../UI/Logo.png";
 import RegisterForm from "../components/registerForm";
 
 export const Register = () => {
-
-
-
-
   return (
     <div className="min-h-screen grid grid-none md:grid-cols-2">
       <div
@@ -58,4 +54,3 @@ export const Register = () => {
     </div>
   );
 };
-
