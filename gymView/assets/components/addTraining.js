@@ -3,8 +3,13 @@ import { Textarea } from "./textarea";
 import {useCookies} from 'react-cookie'
 
 
+
 const AddTraining = () => {
+
+  
+
   const [cookie,setCookie]=useCookies(['JWT'])
+
 
 
 const [data,setData]=useState({exercises:[]})
@@ -12,13 +17,23 @@ const [ex,setEx]=useState()
 const [search,setSearch]=useState("")
 
   useEffect(()=>{
-    console.log(cookie)
+    fetch('http://localhost:8000/user/token/refresh/',{
+      method:'POST',
+      body:JSON.stringify({refresh:cookie.JWT.refresh}),
+      headers: {
+          "Content-Type": "application/json",
+        }
+  }).then(resp=>resp.json()).then(resp=>setCookie('JWT',resp)).then(()=>{
     fetch('http://localhost:8000/user/exercise/',{
       headers: {
         "Content-Type": "application/json",
         "Authorization":`Bearer ${cookie.JWT.access}`
       }
     }).then(resp=>resp.json()).then((resp)=>setEx(resp))
+  })
+
+
+
   },[])
 
 
@@ -39,18 +54,33 @@ const handleAddEx=(id,e)=>{
   setData((prev)=>({...prev,exercises:copy}))
 }
 
-console.log(data)
+console.log(cookie.JWT.access)
 
 const handleSubmit=(e)=>{
   e.preventDefault()
-  fetch('http://localhost:8000/user/Trening/',{
-    method:'POST',
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization":`Bearer ${cookie.JWT.access}`
-    },
-    body:JSON.stringify(data)
-  }).then(resp=>console.log(resp))
+    fetch('http://localhost:8000/user/token/refresh/',{
+      method:'POST',
+      body:JSON.stringify({refresh:cookie.JWT.refresh}),
+      headers: {
+          "Content-Type": "application/json",
+        }
+  }).then(resp=>resp.json()).then(resp=>setCookie('JWT',resp)).then(()=>{
+    fetch('http://localhost:8000/user/Trening/',{
+      method:'POST',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization":`Bearer ${cookie.JWT.access}`
+      },
+      body:JSON.stringify(data)
+    }).then(resp=>console.log(resp))
+    console.log(cookie.JWT.access)
+  })
+
+
+  
+  
+
+
 }
 
   return (
