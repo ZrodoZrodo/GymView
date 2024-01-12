@@ -1,87 +1,73 @@
 import React, { useEffect, useState } from "react";
 import { Textarea } from "./textarea";
-import {useCookies} from 'react-cookie'
-
-
+import { useCookies } from "react-cookie";
 
 const AddTraining = () => {
+  const [cookie, setCookie] = useCookies(["JWT"]);
 
-  
+  const [data, setData] = useState({ exercises: [] });
+  const [ex, setEx] = useState();
+  const [search, setSearch] = useState("");
 
-  const [cookie,setCookie]=useCookies(['JWT'])
-
-
-
-const [data,setData]=useState({exercises:[]})
-const [ex,setEx]=useState()
-const [search,setSearch]=useState("")
-
-  useEffect(()=>{
-    fetch('http://localhost:8000/user/token/refresh/',{
-      method:'POST',
-      body:JSON.stringify({refresh:cookie.JWT.refresh}),
-      headers: {
-          "Content-Type": "application/json",
-        }
-  }).then(resp=>resp.json()).then(resp=>setCookie('JWT',resp)).then(()=>{
-    fetch('http://localhost:8000/user/exercise/',{
+  useEffect(() => {
+    fetch("http://localhost:8000/user/token/refresh/", {
+      method: "POST",
+      body: JSON.stringify({ refresh: cookie.JWT.refresh }),
       headers: {
         "Content-Type": "application/json",
-        "Authorization":`Bearer ${cookie.JWT.access}`
-      }
-    }).then(resp=>resp.json()).then((resp)=>setEx(resp))
-  })
-
-
-
-  },[])
-
-
-
-const handleAddEx=(id,e)=>{
-
-  console.log(e.target.checked)
-  let copy=data.exercises;
-  if(e.target.checked)
-  {
-    copy.push(id)
-  }
-  else{
-      copy=copy.filter(item=>item!==id)
-  }
-
-
-  setData((prev)=>({...prev,exercises:copy}))
-}
-
-console.log(cookie.JWT.access)
-
-const handleSubmit=(e)=>{
-  e.preventDefault()
-    fetch('http://localhost:8000/user/token/refresh/',{
-      method:'POST',
-      body:JSON.stringify({refresh:cookie.JWT.refresh}),
-      headers: {
-          "Content-Type": "application/json",
-        }
-  }).then(resp=>resp.json()).then(resp=>setCookie('JWT',resp)).then(()=>{
-    fetch('http://localhost:8000/user/Trening/',{
-      method:'POST',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization":`Bearer ${cookie.JWT.access}`
       },
-      body:JSON.stringify(data)
-    }).then(resp=>console.log(resp))
-    console.log(cookie.JWT.access)
-  })
+    })
+      .then((resp) => resp.json())
+      .then((resp) => setCookie("JWT", resp))
+      .then(() => {
+        fetch("http://localhost:8000/user/exercise/", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookie.JWT.access}`,
+          },
+        })
+          .then((resp) => resp.json())
+          .then((resp) => setEx(resp));
+      });
+  }, []);
 
+  const handleAddEx = (id, e) => {
+    console.log(e.target.checked);
+    let copy = data.exercises;
+    if (e.target.checked) {
+      copy.push(id);
+    } else {
+      copy = copy.filter((item) => item !== id);
+    }
 
-  
-  
+    setData((prev) => ({ ...prev, exercises: copy }));
+  };
 
+  console.log(cookie.JWT.access);
 
-}
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetch("http://localhost:8000/user/token/refresh/", {
+      method: "POST",
+      body: JSON.stringify({ refresh: cookie.JWT.refresh }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((resp) => setCookie("JWT", resp))
+      .then(() => {
+        fetch("http://localhost:8000/user/Trening/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookie.JWT.access}`,
+          },
+          body: JSON.stringify(data),
+        }).then((resp) => console.log(resp));
+        console.log(cookie.JWT.access);
+      });
+  };
 
   return (
     <div class="card w-full h-full bg-[#1c1c1e] rounded-none md:w-9/12">
@@ -105,7 +91,9 @@ const handleSubmit=(e)=>{
             name="title"
             placeholder="Name of traomomg"
             className="input input-bordered border-[#f78627] max-w-xs"
-            onChange={(e)=>setData((prev)=>({...prev,name:e.target.value}))}
+            onChange={(e) =>
+              setData((prev) => ({ ...prev, name: e.target.value }))
+            }
           />{" "}
           <hr className="border-[#f78627] w-4/5" />
           <p className="text-2xl"> Week:</p>
@@ -113,18 +101,35 @@ const handleSubmit=(e)=>{
             type="date"
             placeholder="Week"
             className="input input-bordered border-[#f78627] max-w-xs"
-            onChange={(e)=>setData((prev)=>({...prev,date:e.target.value}))}
+            onChange={(e) =>
+              setData((prev) => ({ ...prev, date: e.target.value }))
+            }
           />{" "}
           <hr className="border-[#f78627] w-4/5" />
           <p className="text-2xl"> List of excersise</p>
-          <div className="h-92 overflow-auto" >
-            <input type='text' onChange={(e)=>setSearch(e.target.value)}/>
-            {ex&&ex.filter(e=>e.name.includes(search)).map(e=><p><label><input type='checkbox' onChange={(event)=>handleAddEx(e.id,event)}/>{e.name}</label></p>)}
+          <div className="h-92 overflow-auto">
+            <input type="text" onChange={(e) => setSearch(e.target.value)} />
+            {ex &&
+              ex
+                .filter((e) => e.name.includes(search))
+                .map((e) => (
+                  <p>
+                    <label>
+                      <input
+                        type="checkbox"
+                        onChange={(event) => handleAddEx(e.id, event)}
+                      />
+                      {e.name}
+                    </label>
+                  </p>
+                ))}
           </div>
           <hr className="border-[#f78627] w-4/5" />
           <p className="text-2xl"> Comment:</p>
           <textarea
-          onChange={(e)=>setData((prev)=>({...prev,comment:e.target.value}))}
+            onChange={(e) =>
+              setData((prev) => ({ ...prev, comment: e.target.value }))
+            }
             type="text"
             rows="8"
             cols="100"
@@ -133,7 +138,10 @@ const handleSubmit=(e)=>{
           />{" "}
           <div className="flex flex-wrap gap-4">
             <a className="btn btn-outline text-white">Show trainings</a>
-            <button onClick={(e)=>handleSubmit(e)} class="btn btn-success text-main-dark border-2 border-success max-w-xs  justify-center">
+            <button
+              onClick={(e) => handleSubmit(e)}
+              class="btn btn-success text-main-dark border-2 border-success max-w-xs  justify-center"
+            >
               Zapisz zmiany
             </button>{" "}
           </div>
