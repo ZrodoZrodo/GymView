@@ -1,9 +1,12 @@
 import React,{useState} from "react";
 import {useCookies} from 'react-cookie'
+import { useNavigate } from "react-router-dom";
+
+
 const LoginForm = () => {
   const [data,setData]=useState({})
   const [fail,setFail]=useState(false)
-
+  const navigate=useNavigate()
 
     const [cookie,setCookie]=useCookies(['JWT'])
   const handleSubmit = (e)=>{
@@ -15,13 +18,13 @@ const LoginForm = () => {
         "Content-Type": "application/json",
       },
     }).then(resp=>resp.json()).then(resp=>{
-      console.log(resp)
         if(resp.detail)
         {
           setFail(true)
         }
         else{
-          setCookie(JSON.stringify(resp))
+          setCookie('JWT',resp)
+          navigate('/dashboard')
         }
     })
     

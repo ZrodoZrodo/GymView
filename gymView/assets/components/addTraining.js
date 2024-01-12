@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Textarea } from "./textarea";
 import {useCookies} from 'react-cookie'
 
@@ -8,13 +8,51 @@ const AddTraining = () => {
 
 
 const [data,setData]=useState({exercises:[]})
+const [ex,setEx]=useState()
+const [search,setSearch]=useState("")
 
+  useEffect(()=>{
+    console.log(cookie)
+    fetch('http://localhost:8000/user/exercise/',{
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization":`Bearer ${cookie.JWT.access}`
+      }
+    }).then(resp=>resp.json()).then((resp)=>setEx(resp))
+  },[])
+
+
+
+const handleAddEx=(id,e)=>{
+
+  console.log(e.target.checked)
+  let copy=data.exercises;
+  if(e.target.checked)
+  {
+    copy.push(id)
+  }
+  else{
+      copy=copy.filter(item=>item!==id)
+  }
+
+
+  setData((prev)=>({...prev,exercises:copy}))
+}
+
+console.log(data)
 
 const handleSubmit=(e)=>{
-e.preventDefault()
+  e.preventDefault()
+  fetch('http://localhost:8000/user/Trening/',{
+    method:'POST',
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization":`Bearer ${cookie.JWT.access}`
+    },
+    body:JSON.stringify(data)
+  }).then(resp=>console.log(resp))
 }
-console.log(cookie)
-console.log(data)
+
   return (
     <div class="card w-full h-full bg-[#1c1c1e] rounded-none md:w-9/12">
       <div class="flex flex-col space-y-4 card-body">
@@ -49,6 +87,10 @@ console.log(data)
           />{" "}
           <hr className="border-[#f78627] w-4/5" />
           <p className="text-2xl"> List of excersise</p>
+          <div className="h-92 overflow-auto" >
+            <input type='text' onChange={(e)=>setSearch(e.target.value)}/>
+            {ex&&ex.filter(e=>e.name.includes(search)).map(e=><p><label><input type='checkbox' onChange={(event)=>handleAddEx(e.id,event)}/>{e.name}</label></p>)}
+          </div>
           <hr className="border-[#f78627] w-4/5" />
           <p className="text-2xl"> Comment:</p>
           <textarea
@@ -61,7 +103,7 @@ console.log(data)
           />{" "}
           <div className="flex flex-wrap gap-4">
             <a className="btn btn-outline text-white">Show trainings</a>
-            <button class="btn btn-success text-main-dark border-2 border-success max-w-xs  justify-center">
+            <button onClick={(e)=>handleSubmit(e)} class="btn btn-success text-main-dark border-2 border-success max-w-xs  justify-center">
               Zapisz zmiany
             </button>{" "}
           </div>

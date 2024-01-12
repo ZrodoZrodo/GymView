@@ -8,9 +8,6 @@ import { HomePage } from "./pages/homePage";
 import { Dashboard } from "./pages/dashboard";
 
 export const App=()=>{
-    const [cookie,setCookie]=useCookies(['tese'])
-    setCookie("test1")
-    console.log(cookie)
     return(
         <>
 
