@@ -5,6 +5,7 @@ import { DashboardInfo } from "../components/dashboardInfo";
 import { TrainingInfo } from "../components/trainingInfo";
 import { TrainingList } from "../components/trainingList";
 import { Exercise } from "../components/Exercise";
+import { AddExercise } from "../components/addExercise";
 
 export const Dashboard = () => {
   return (

@@ -36,7 +36,7 @@ export const HomePage = () => {
           </button>
           <button
             onClick={() => navigate("/signin")}
-            className="btn bg-main-orange text-white h-20 uppercase w-40 rounded-none border-none"
+            className="btn  text-white h-20 uppercase w-40 rounded-none border-none"
           >
             Join now!
           </button>
