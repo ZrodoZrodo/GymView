@@ -1,11 +1,43 @@
-import React from "react";
-
+import React,{useEffect, useState} from "react";
+import { useParams } from "react-router";
+import { useCookies } from "react-cookie";
 export const Exercise = () => {
+
+  const {id}= useParams();
+  const [exercise,setExercise]=useState()
+  const [cookie,setCookie]=useCookies()
+
+  useEffect(() => {
+    fetch("http://localhost:8000/user/token/refresh/", {
+      method: "POST",
+      body: JSON.stringify({ refresh: cookie.JWT.refresh }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((resp) => resp.json())
+      .then((resp) => setCookie("JWT", resp))
+      .then(() => {
+        fetch(`http://localhost:8000/user/exercise/${id}/`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookie.JWT.access}`,
+          },
+        })
+          .then((resp) => resp.json())
+          .then((resp) => setExercise(resp));
+      });
+  }, []);
+
+  console.log(exercise)
+
+  if(!exercise) return;
+
   return (
     <div class="card w-full h-full bg-[#1c1c1e] rounded-none md:w-9/12">
       <div class="flex flex-col space-y-4 card-body">
         <h2 class="text-white text-left text-3xl underline-offset-8">
-          Exercise name:
+          Exercise name: {exercise.name}
         </h2>
         <div className=" text-center text-white px-2">
           {" "}
