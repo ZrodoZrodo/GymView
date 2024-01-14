@@ -9,6 +9,34 @@ export const TrainingInfo = () => {
   const {id}= useParams();
   const [cookie,setCookie]=useCookies()
   const [training,setTrening]=useState()
+  const [ex, setEx] = useState();
+  const [exercises,setExercises]=useState([]);
+  const [search, setSearch] = useState("");
+
+useEffect(()=>{
+  fetch("http://localhost:8000/user/token/refresh/", {
+    method: "POST",
+    body: JSON.stringify({ refresh: cookie.JWT.refresh }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((resp) => resp.json())
+    .then((resp) => setCookie("JWT", resp))
+},[])
+
+  useEffect(()=>{
+
+        fetch("http://localhost:8000/user/exercise/", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookie.JWT.access}`,
+          },
+        })
+          .then((resp) => resp.json())
+          .then((resp) => setEx(resp));
+      
+  },[cookie])
 
 
   const handleClick=(id)=>{
@@ -42,6 +70,36 @@ export const TrainingInfo = () => {
   }
 
   useEffect(() => {
+
+        fetch(`http://localhost:8000/user/Trening/${id}/`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookie.JWT.access}`,
+          },
+        })
+          .then((resp) => resp.json())
+          .then((resp) => setTrening(resp[0]?resp[0]:[]));
+      
+  }, [cookie]);
+
+  const handleAddEx = (id, e) => {
+    if (e.target.checked) {
+      setExercises((prev)=>[...prev,id])
+    } else {
+      setExercises((prev)=>prev.filter(ex=>ex!==id))
+    }
+
+
+  };
+
+  const handleSave=()=>{
+    const data={
+      exercises:[...training.exercises.map(ex=>ex.exercise.id),...exercises],
+      name:training.name,
+      date:training.date,
+      comment:training.comment,
+    }
+
     fetch("http://localhost:8000/user/token/refresh/", {
       method: "POST",
       body: JSON.stringify({ refresh: cookie.JWT.refresh }),
@@ -53,17 +111,18 @@ export const TrainingInfo = () => {
       .then((resp) => setCookie("JWT", resp))
       .then(() => {
         fetch(`http://localhost:8000/user/Trening/${id}/`, {
+          method:"PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${cookie.JWT.access}`,
           },
+          body:JSON.stringify(data)
         })
-          .then((resp) => resp.json())
-          .then((resp) => setTrening(resp[0]?resp[0]:[]));
+          .then((resp) => resp.json()).then(()=>navigate("/treningList"))
       });
-  }, []);
-console.log(training)
-  
+
+  }
+
   if(!training) return;
 
   return (
@@ -82,15 +141,32 @@ console.log(training)
         <div>
           <hr className="border" />
         </div>
-
+        
         <div className="grid grid-cols-3 gap-4 text-center ">
         {training.exercises.map((ex)=><div className="flex flex-col space-y-2 border-12" >
             <p onClick={()=>navigate(`/exercise/${ex.exercise.id}`)} className=" text-center text-[#FA7309]">{ex.exercise.name}</p>
             <p className="text-white text-2xl " onClick={()=>handleClick(ex.exercise.id)}>usuń </p>
           </div>)}
-
+          <div className="h-92 overflow-auto">
+            <input type="text" onChange={(e) => setSearch(e.target.value)} />
+            {ex &&
+              ex
+               .filter(e=>!(training.exercises.map(ex=>ex.exercise.id)).includes(e.id))
+                .filter((e) => e.name.includes(search))
+                .map((e) => (
+                  <p>
+                    <label>
+                      <input
+                        type="checkbox"
+                        onChange={(event) => handleAddEx(e.id, event)}
+                      />
+                      {e.name}
+                    </label>
+                  </p>
+                ))}
+          </div>
         </div>
-        <div class="card-actions justify-end"></div>
+        <div class="card-actions justify-end"><button onClick={()=>handleSave()}>Zapisz</button></div>
         <div className="UserInfo w-full h-full"></div>
       </div>
     </div>
