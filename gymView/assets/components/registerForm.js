@@ -14,7 +14,7 @@ const RegisterForm = () => {
       headers: {
         "Content-Type": "application/json",
       },
-    }).then(resp=>resp.status===400?setFail(true):navigate('/signin'))
+    }).then(resp=>resp.status===400?setFail(true):location.href('http://localhost:8000/signIn'))
     
   }
   return (

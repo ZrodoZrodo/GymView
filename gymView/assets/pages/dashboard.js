@@ -4,7 +4,7 @@ import Sidebar from "../components/sideBar";
 import { DashboardInfo } from "../components/dashboardInfo";
 import { TrainingInfo } from "../components/trainingInfo";
 import { TrainingList } from "../components/trainingList";
-import { Exercise } from "../components/Exercise";
+
 import { AddExercise } from "../components/addExercise";
 
 export const Dashboard = () => {
@@ -13,7 +13,7 @@ export const Dashboard = () => {
       <DashboardNavbar></DashboardNavbar>
       <div className="flex flex-nowrap min-h-screen w-full ">
         <Sidebar></Sidebar>
-        <Exercise />
+        <AddExercise />
         <DashboardInfo />
       </div>
     </div>

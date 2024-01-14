@@ -1,10 +1,8 @@
 import React from "react";
 import Navbar from "../components/navbar";
 import backgroundHero from "../UI/backgrounds/hero.png";
-import { useNavigate } from "react-router-dom";
 
 export const HomePage = () => {
-  const navigate = useNavigate();
 
   return (
     <div
@@ -29,13 +27,13 @@ export const HomePage = () => {
         </a>
         <div className="mt-4">
           <button
-            onClick={() => navigate("/info")}
+            onClick={() => location.href="http://127.0.0.1:8000/info"}
             className="btn btn-outline text-white uppercase h-20 w-40 rounded-none  mr-6"
           >
             Learn more
           </button>
           <button
-            onClick={() => navigate("/signin")}
+            onClick={() =>location.href="http://127.0.0.1:8000/signin"}
             className="btn  text-white h-20 uppercase w-40 rounded-none border-none"
           >
             Join now!

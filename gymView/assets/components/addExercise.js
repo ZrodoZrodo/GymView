@@ -1,13 +1,40 @@
-import React from "react";
-
-const user = { name: "test" };
+import React,{useState} from "react";
+import { useCookies } from "react-cookie";
 
 export const AddExercise = () => {
+  const [cookie,setCookie]=useCookies()
+  const [exercise,setExercise]=useState("")
+  const handleSubmit=(e)=>{
+    e.preventDefault();
+    
+    if(exercise.length!==0){
+      fetch("http://localhost:8000/user/token/refresh/", {
+        method: "POST",
+        body: JSON.stringify({ refresh: cookie.JWT.refresh }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((resp) => resp.json())
+        .then((resp) => setCookie("JWT", resp))
+        .then(() => {
+          fetch(`http://localhost:8000/user/exercise/`, {
+            method:"POST",
+            body:JSON.stringify({name:exercise}),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${cookie.JWT.access}`,
+            },
+          }).then(resp=>resp.json()).then(()=>setExercise(""))
+        });
+    }
+  }
+
   return (
     <div class="card w-full h-full bg-[#1c1c1e] rounded-none md:w-9/12">
       <div class="flex flex-col space-y-4 card-body">
         <h2 class="text-white text-center text-3xl underline decoration-[#f78627] underline-offset-8">
-          Hello dear {user.name}!
+          Hello !
         </h2>
         <div className=" text-center text-white ">
           {" "}
@@ -175,10 +202,12 @@ export const AddExercise = () => {
             </h2>
             <div class="join">
               <input
+              value={exercise}
+              onChange={(e)=>setExercise(e.target.value)}
                 class="input input-bordered border-[#f78627] join-item"
                 placeholder="Exercise name"
               />
-              <button class="btn  border-[#f78627] join-item rounded-r-full">
+              <button onClick={(e)=>handleSubmit(e)} class="btn  border-[#f78627] join-item rounded-r-full">
                 Exercise!
               </button>
             </div>

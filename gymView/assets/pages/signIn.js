@@ -2,11 +2,10 @@ import React,{useState} from "react";
 import { Input } from "../components/input";
 import LoginForm from "../components/loginForm";
 import background from "../UI/backgrounds/signIn.png";
-import { useNavigate } from "react-router-dom";
 
 export const SignIn = () => {
 
-  const navigate=useNavigate()
+
 
   return (
     <div className="min-h-screen grid grid-none md:grid-cols-2">
@@ -47,7 +46,7 @@ export const SignIn = () => {
           <LoginForm />
           <p className="text-center mt-4">
             Don't have an account?
-            <a onClick={()=>navigate('/register')} className="underline underline-offset-4 pl-1" >
+            <a onClick={()=>location.href="http://localhost:8000/register"} className="underline underline-offset-4 pl-1" >
               Sign up for free
             </a>
           </p>

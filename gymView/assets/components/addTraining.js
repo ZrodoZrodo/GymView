@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Textarea } from "./textarea";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router";
 
-const AddTraining = () => {
+export const AddTraining = () => {
   const [cookie, setCookie] = useCookies(["JWT"]);
-
+  const navigate=useNavigate();
   const [data, setData] = useState({ exercises: [] });
   const [ex, setEx] = useState();
   const [search, setSearch] = useState("");
@@ -64,7 +65,12 @@ const AddTraining = () => {
             Authorization: `Bearer ${cookie.JWT.access}`,
           },
           body: JSON.stringify(data),
-        }).then((resp) => console.log(resp));
+        }).then((resp) =>{
+          if(resp.status===201)
+          {
+            navigate('/treningList')
+          }
+        });
         console.log(cookie.JWT.access);
       });
   };
@@ -137,7 +143,7 @@ const AddTraining = () => {
             className="rounded-md caret-transparent bg-[#2A303C] border-2 border-[#f78627] text-[#f78627] resize-none text-left w-11/12 md:w-1/2"
           />{" "}
           <div className="flex flex-wrap gap-4">
-            <a className="btn btn-outline text-white">Show trainings</a>
+            <a onClick={()=>navigate('/treningList')} className="btn btn-outline text-white">Show trainings</a>
             <button
               onClick={(e) => handleSubmit(e)}
               class="btn btn-success text-main-dark border-2 border-success max-w-xs  justify-center"
@@ -152,4 +158,4 @@ const AddTraining = () => {
   );
 };
 
-export default AddTraining;
+

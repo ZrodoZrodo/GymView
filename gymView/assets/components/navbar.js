@@ -1,9 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import logo from "../UI/Logo.png";
 
 export const Navbar = () => {
-  const navigate = useNavigate();
+
 
   return (
     <div className="navbar pt-8">
@@ -62,15 +61,15 @@ export const Navbar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <a className="text-main-orange" onClick={() => navigate("/")}>
+            <a className="text-main-orange">
               Home page
             </a>
           </li>
           <li>
-            <a onClick={() => navigate("/signin")}>Sign in!</a>
+            <a onClick={() => location.href="http://127.0.0.1:8000/signin"}>Sign in!</a>
           </li>
           <li>
-            <a onClick={() => navigate("/register")}>Register</a>
+            <a onClick={() => location.href="http://127.0.0.1:8000/register"}>Register</a>
           </li>
         </ul>
       </div>
