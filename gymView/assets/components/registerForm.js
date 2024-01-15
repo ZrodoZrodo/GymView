@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
   const [data, setData] = useState({});
-  const navigate = useNavigate();
   const [fail, setFail] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
