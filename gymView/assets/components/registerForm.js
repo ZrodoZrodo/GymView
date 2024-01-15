@@ -14,7 +14,7 @@ const RegisterForm = () => {
     }).then((resp) =>
       resp.status === 400
         ? setFail(true)
-        : location.href("http://localhost:8000/signin")
+        : location.href="http://localhost:8000/signin"
     );
   };
   return (

@@ -14,18 +14,23 @@ export const TrainingInfo = () => {
   const [ex, setEx] = useState();
   const [exercises, setExercises] = useState([]);
   const [search, setSearch] = useState("");
+  if(!cookie.JWT)
+  {
+    location.href="http://127.0.0.1:8000/signin/"
+  }
+ 
 
-  useEffect(() => {
-    fetch("http://localhost:8000/user/token/refresh/", {
-      method: "POST",
-      body: JSON.stringify({ refresh: cookie.JWT.refresh }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((resp) => resp.json())
-      .then((resp) => setCookie("JWT", resp));
-  }, []);
+useEffect(()=>{
+  fetch("http://localhost:8000/user/token/refresh/", {
+    method: "POST",
+    body: JSON.stringify({ refresh: cookie.JWT.refresh }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((resp) => resp.json())
+    .then((resp) => setCookie("JWT", resp))
+},[])
 
   useEffect(() => {
     fetch("http://localhost:8000/user/exercise/", {
@@ -38,15 +43,13 @@ export const TrainingInfo = () => {
       .then((resp) => setEx(resp));
   }, [cookie]);
 
-  const handleClick = (id) => {
-    const data = {
-      exercises: training.exercises
-        .filter((ex) => ex.exercise.id !== id)
-        .map((ex) => ex.exercise.id),
-      name: training.name,
-      date: training.date,
-      comment: training.comment,
-    };
+  const handleClick=(eid)=>{
+    const data={
+      exercises:training.exercises.filter(ex=>ex.exercise.id!==eid).map(ex=>ex.exercise.id),
+      name:training.name,
+      date:training.date,
+      comment:training.comment,
+    }
     fetch("http://localhost:8000/user/token/refresh/", {
       method: "POST",
       body: JSON.stringify({ refresh: cookie.JWT.refresh }),
