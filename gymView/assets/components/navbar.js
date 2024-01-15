@@ -2,8 +2,6 @@ import React from "react";
 import logo from "../UI/Logo.png";
 
 export const Navbar = () => {
-
-
   return (
     <div className="navbar pt-8">
       <div className="navbar-start">
@@ -47,29 +45,27 @@ export const Navbar = () => {
             </li>
           </ul>
         </div>
-        <div className="text-[#F78627] h-1/2 w-3/4 ml-16">
-          <div
-            style={{
-              backgroundImage: `url(${logo})`,
-              backgroundRepeat: "no-repeat",
-            }}
-          >
-            .<br />
-          </div>
+        <div className="text-5xl font-bold text-bold h-1/2 w-3/4 ml-16">
+          <span className="text-[#FA7309]">Gym</span>
+          <span className="text-[#f78627]">View</span>
         </div>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <a className="text-main-orange">
-              Home page
+            <a className="text-main-orange">Home page</a>
+          </li>
+          <li>
+            <a onClick={() => (location.href = "http://127.0.0.1:8000/signin")}>
+              Sign in!
             </a>
           </li>
           <li>
-            <a onClick={() => location.href="http://127.0.0.1:8000/signin"}>Sign in!</a>
-          </li>
-          <li>
-            <a onClick={() => location.href="http://127.0.0.1:8000/register"}>Register</a>
+            <a
+              onClick={() => (location.href = "http://127.0.0.1:8000/register")}
+            >
+              Register
+            </a>
           </li>
         </ul>
       </div>
