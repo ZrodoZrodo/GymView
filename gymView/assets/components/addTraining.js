@@ -9,7 +9,10 @@ export const AddTraining = () => {
   const [data, setData] = useState({ exercises: [] });
   const [ex, setEx] = useState();
   const [search, setSearch] = useState("");
-
+  if(!cookie.JWT)
+  {
+    location.href="http://127.0.0.1:8000/signin/"
+  }
   useEffect(() => {
     fetch("http://localhost:8000/user/token/refresh/", {
       method: "POST",

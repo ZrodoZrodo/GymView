@@ -2,11 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useCookies } from "react-cookie";
 export const Exercise = () => {
+
   const {id}= useParams();
   const [exercise,setExercise]=useState()
   const [cookie,setCookie]=useCookies()
   const [newWeek,setNewWek]=useState({})
   const [message,setMessage]=useState("")
+  if(!cookie.JWT)
+  {
+    location.href="http://127.0.0.1:8000/signin/"
+  }
   useEffect(() => {
     fetch("http://localhost:8000/user/token/refresh/", {
       method: "POST",

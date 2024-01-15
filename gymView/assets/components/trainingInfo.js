@@ -12,6 +12,11 @@ export const TrainingInfo = () => {
   const [ex, setEx] = useState();
   const [exercises,setExercises]=useState([]);
   const [search, setSearch] = useState("");
+  if(!cookie.JWT)
+  {
+    location.href="http://127.0.0.1:8000/signin/"
+  }
+ 
 
 useEffect(()=>{
   fetch("http://localhost:8000/user/token/refresh/", {
@@ -39,9 +44,9 @@ useEffect(()=>{
   },[cookie])
 
 
-  const handleClick=(id)=>{
+  const handleClick=(eid)=>{
     const data={
-      exercises:training.exercises.filter(ex=>ex.exercise.id!==id).map(ex=>ex.exercise.id),
+      exercises:training.exercises.filter(ex=>ex.exercise.id!==eid).map(ex=>ex.exercise.id),
       name:training.name,
       date:training.date,
       comment:training.comment,

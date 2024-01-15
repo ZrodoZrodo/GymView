@@ -6,6 +6,10 @@ export const TrainingList = () => {
   const [trenings,setTrenings]=useState([])
   const [cookie,setCookie]=useCookies()
   const [date,setDate]=useState("")
+  if(!cookie.JWT)
+  {
+    location.href="http://127.0.0.1:8000/signin/"
+  }
   useEffect(() => {
     fetch("http://localhost:8000/user/token/refresh/", {
       method: "POST",
