@@ -4,13 +4,6 @@ import { useCookies } from "react-cookie";
 import { DashboardInfo } from "./dashboardInfo";
 import Sidebar from "./sideBar";
 export const Exercise = () => {
-<<<<<<< HEAD
-  const { id } = useParams();
-  const [exercise, setExercise] = useState();
-  const [cookie, setCookie] = useCookies();
-  const [newWeek, setNewWek] = useState({});
-  const [message, setMessage] = useState("");
-=======
 
   const {id}= useParams();
   const [exercise,setExercise]=useState()
@@ -21,7 +14,6 @@ export const Exercise = () => {
   {
     location.href="http://127.0.0.1:8000/signin/"
   }
->>>>>>> aa1813b9e492ab65cf908f08b857b24abd0c84a6
   useEffect(() => {
     fetch("http://localhost:8000/user/token/refresh/", {
       method: "POST",
@@ -193,7 +185,7 @@ export const Exercise = () => {
                   <p className="text-2xl"> Comment</p>
                   <input
                     required
-                    type="number"
+                    type="text"
                     placeholder="Weights"
                     className="input input-bordered border-[#f78627] max-w-xs"
                     onChange={(e) =>
