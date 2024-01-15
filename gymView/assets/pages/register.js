@@ -13,7 +13,9 @@ export const Register = () => {
         className=" invisible md:visible bg-center bg-cover order-last relative md:order-none min-h-full"
       >
         <div className=" ml-8 absolute inset-x-0 bottom-10">
-          <p className="text-white text-3xl">Start the workout!</p>
+          <p className="text-white text-3xl">
+            Start the workout!
+          </p>
           <p className="underline underline-offset-4 text-sm text-white">
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta
             laudantium obcaecati.
@@ -43,12 +45,6 @@ export const Register = () => {
             become a beast!
           </p>
           <RegisterForm />
-          <p className="text-center mt-4">
-            Don't have an account?
-            <span className="underline underline-offset-4 pl-1">
-              Sign up for free
-            </span>
-          </p>
         </div>
       </div>
     </div>
