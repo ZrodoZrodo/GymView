@@ -3,7 +3,6 @@ import Navbar from "../components/navbar";
 import backgroundHero from "../UI/backgrounds/hero.png";
 
 export const HomePage = () => {
-
   return (
     <div
       style={{
@@ -12,7 +11,7 @@ export const HomePage = () => {
       className=" max-h-screen w-full min-h-screen"
     >
       <Navbar />
-      <div className="flex flex-col items-center justify-center mt-56 ">
+      <div className="flex flex-col items-center justify-center mt-36 ">
         <a className="font-bold text-white text-6xl text-center">
           REACH YOUR LIMIT <br />
           AND GET TO THE <br />
@@ -27,13 +26,13 @@ export const HomePage = () => {
         </a>
         <div className="mt-4">
           <button
-            onClick={() => location.href="http://127.0.0.1:8000/info"}
+            onClick={() => (location.href = "http://127.0.0.1:8000/info")}
             className="btn btn-outline text-white uppercase h-20 w-40 rounded-none  mr-6"
           >
             Learn more
           </button>
           <button
-            onClick={() =>location.href="http://127.0.0.1:8000/signin"}
+            onClick={() => (location.href = "http://127.0.0.1:8000/signin")}
             className="btn  text-white h-20 uppercase w-40 rounded-none border-none"
           >
             Join now!
