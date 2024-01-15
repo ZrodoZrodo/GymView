@@ -1,13 +1,13 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 
 export const AddExercise = () => {
-  const [cookie,setCookie]=useCookies()
-  const [exercise,setExercise]=useState("")
-  const handleSubmit=(e)=>{
+  const [cookie, setCookie] = useCookies();
+  const [exercise, setExercise] = useState("");
+  const handleSubmit = (e) => {
     e.preventDefault();
-    
-    if(exercise.length!==0){
+
+    if (exercise.length !== 0) {
       fetch("http://localhost:8000/user/token/refresh/", {
         method: "POST",
         body: JSON.stringify({ refresh: cookie.JWT.refresh }),
@@ -19,16 +19,18 @@ export const AddExercise = () => {
         .then((resp) => setCookie("JWT", resp))
         .then(() => {
           fetch(`http://localhost:8000/user/exercise/`, {
-            method:"POST",
-            body:JSON.stringify({name:exercise}),
+            method: "POST",
+            body: JSON.stringify({ name: exercise }),
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${cookie.JWT.access}`,
             },
-          }).then(resp=>resp.json()).then(()=>setExercise(""))
+          })
+            .then((resp) => resp.json())
+            .then(() => setExercise(""));
         });
     }
-  }
+  };
 
   return (
     <div class="card w-full h-full bg-[#1c1c1e] rounded-none md:w-9/12">
@@ -202,12 +204,15 @@ export const AddExercise = () => {
             </h2>
             <div class="join">
               <input
-              value={exercise}
-              onChange={(e)=>setExercise(e.target.value)}
+                value={exercise}
+                onChange={(e) => setExercise(e.target.value)}
                 class="input input-bordered border-[#f78627] join-item"
                 placeholder="Exercise name"
               />
-              <button onClick={(e)=>handleSubmit(e)} class="btn  border-[#f78627] join-item rounded-r-full">
+              <button
+                onClick={(e) => handleSubmit(e)}
+                class="btn  border-[#f78627] join-item rounded-r-full"
+              >
                 Exercise!
               </button>
             </div>
