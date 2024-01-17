@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import { useCookies } from "react-cookie";
 import { DashboardInfo } from "./dashboardInfo";
 import Sidebar from "./sideBar";
+import DashboardNavbar from "./dashboardNavbar";
 export const Exercise = () => {
 
   const {id}= useParams();
@@ -112,12 +113,13 @@ export const Exercise = () => {
   if (!exercise) return;
 
   return (
+    <form>
+    {message}
     <div className="flex flex-wrap max-h-screen w-full min-h-screen">
-      <DashboardInfo />
+      <DashboardNavbar/>
       <div className="flex flex-nowrap min-h-screen w-full ">
         <Sidebar />
-        <form>
-          {message}
+       
           <div class="card w-full h-full bg-[#1c1c1e] rounded-none md:w-9/12">
             <div class="flex flex-col space-y-4 card-body">
               <h2 class="text-white text-left text-3xl underline-offset-8">
@@ -241,9 +243,10 @@ export const Exercise = () => {
                 ))}
             </div>
           </div>
-        </form>
+       
         <DashboardInfo />
       </div>
     </div>
+    </form>
   );
 };

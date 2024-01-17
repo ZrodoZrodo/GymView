@@ -50,20 +50,11 @@ export const AddTraining = () => {
     setData((prev) => ({ ...prev, exercises: copy }));
   };
 
-  console.log(cookie.JWT.access);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:8000/user/token/refresh/", {
-      method: "POST",
-      body: JSON.stringify({ refresh: cookie.JWT.refresh }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((resp) => resp.json())
-      .then((resp) => setCookie("JWT", resp))
-      .then(() => {
+
         fetch("http://localhost:8000/user/Trening/", {
           method: "POST",
           headers: {
@@ -76,8 +67,7 @@ export const AddTraining = () => {
             navigate("/treningList");
           }
         });
-        console.log(cookie.JWT.access);
-      });
+    
   };
 
   return (

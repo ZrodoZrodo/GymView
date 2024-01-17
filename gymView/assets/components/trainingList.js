@@ -13,7 +13,10 @@ export const TrainingList = () => {
   {
     location.href="http://127.0.0.1:8000/signin/"
   }
+
+
   useEffect(() => {
+    console.log(cookie.JWT)
     fetch("http://localhost:8000/user/token/refresh/", {
       method: "POST",
       body: JSON.stringify({ refresh: cookie.JWT.refresh }),
